@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SplitRide Pro | Smart Mobility Cost Splitter</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        obsidian: {
+                            850: '#131722',
+                            900: '#0b0e14',
+                            950: '#07090d',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(99, 102, 241, 0.35)',
+                        'glow-emerald': '0 0 20px -5px rgba(16, 185, 129, 0.3)',
+                        'bento': '0 4px 24px -4px rgba(15, 23, 42, 0.06)',
+                        'bento-dark': '0 4px 28px -4px rgba(0, 0, 0, 0.45)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Subtle Animations & Scrollbars */
+        @keyframes dashFlow {
+            to {
+                stroke-dashoffset: -16;
+            }
+        }
+        .route-dash {
+            stroke-dasharray: 4 4;
+            animation: dashFlow 1.2s linear infinite;
+        }
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .animate-toast {
+            animation: slideUpFade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .mesh-hero {
+            background-color: #0b0e14;
+            background-image: 
+                radial-gradient(at 12% 20%, rgba(99, 102, 241, 0.24) 0px, transparent 50%),
+                radial-gradient(at 88% 15%, rgba(16, 185, 129, 0.16) 0px, transparent 48%),
+                radial-gradient(at 55% 95%, rgba(79, 70, 229, 0.18) 0px, transparent 55%);
+        }
+        /* Custom sleek scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.55);
+        }
+        /* Hide number input spinners for clean fintech look */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-obsidian-950 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300 selection:bg-brand-500 selection:text-white">
+
+    <!-- ===================================================================== -->
+    <!-- DARK-OBSIDIAN GLASSMORPHIC HEADER & HERO METRICS BAND                 -->
+    <!-- ===================================================================== -->
+    <div class="mesh-hero text-white border-b border-white/10 relative overflow-hidden">
+        <!-- Subtle decorative grid overlay -->
+        <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+        <!-- Sticky Top Glass Navbar -->
+        <header class="sticky top-0 z-30 backdrop-blur-xl bg-obsidian-900/75 border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+                <!-- Brand Identity -->
+                <div class="flex items-center gap-3.5">
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-tr from-brand-500 to-emerald-400 rounded-xl blur opacity-60 group-hover:opacity-90 transition"></div>
+                        <div class="relative bg-obsidian-900 border border-white/15 text-white p-2.5 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-route text-brand-400 text-lg"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">SplitRide <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-emerald-400">Pro</span></h1>
+                        </div>
+                        <p class="text-[11px] text-slate-400 hidden sm:block">Smart Mobility Expense & Ledger Engine</p>
+                    </div>
+                </div>
+
+                <!-- Right Controls: Threshold Pill, Theme Toggle, CSV Import & Export -->
+                <div class="flex items-center gap-2 sm:gap-2.5">
+                    <!-- Threshold Alert Setting Pill -->
+                    <div class="hidden md:flex items-center bg-white/5 hover:bg-white/10 transition px-3 py-1.5 rounded-xl border border-white/10">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse mr-2"></span>
+                        <label for="thresholdInput" class="text-xs font-medium text-slate-300 mr-2">Alert Limit</label>
+                        <div class="relative flex items-center">
+                            <span class="text-xs font-mono text-slate-400 mr-0.5">$</span>
+                            <input type="number" id="thresholdInput" value="100" min="1" step="5"
+                                class="w-14 bg-obsidian-950/80 font-mono text-xs font-bold text-amber-300 px-2 py-1 rounded-lg border border-white/15 focus:outline-none focus:border-amber-400 text-right">
+                        </div>
+                    </div>
+
+                    <!-- Light / Dark Theme Toggle -->
+                    <button onclick="toggleTheme()" id="themeToggleBtn" title="Switch Light / Dark Mode"
+                        class="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 hover:text-white transition flex items-center justify-center">
+                        <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
+                    </button>
+
+                    <!-- Bulk CSV Import -->
+                    <button onclick="openModal('csvModal')"
+                        class="px-3 py-2 text-xs font-semibold text-slate-200 bg-white/5 hover:bg-white/15 border border-white/10 rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-file-csv text-emerald-400"></i>
+                        <span class="hidden sm:inline">Import CSV</span>
+                    </button>
+
+                    <!-- Executive Report Export -->
+                    <button onclick="openModal('exportModal')"
+                        class="px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-brand-600 to-indigo-500 hover:from-brand-500 hover:to-indigo-400 rounded-xl shadow-glow transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                        <span>Export</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Executive Summary KPI Cards -->
+        <section aria-label="Executive Summary Metrics" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- KPI 1: Total Rides -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/[0.07] transition group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Rides</span>
+                        <div class="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-400 flex items-center justify-center group-hover:scale-105 transition">
+                            <i class="fa-solid fa-car-side text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <h2 id="kpiTotalRides" class="font-mono text-2xl sm:text-3xl font-bold text-white tracking-tight">0</h2>
+                        <span class="text-[11px] font-medium text-blue-300/80 bg-blue-500/10 px-2 py-0.5 rounded-md">Synced</span>
+                    </div>
+                </div>
+
+                <!-- KPI 2: Grand Total Spent -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/[0.07] transition group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Mobility Spend</span>
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-400/20 text-emerald-400 flex items-center justify-center group-hover:scale-105 transition">
+                            <i class="fa-solid fa-wallet text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <h2 id="kpiGrandTotal" class="font-mono text-2xl sm:text-3xl font-bold text-emerald-400 tracking-tight">$0.00</h2>
+                        <span class="text-[11px] font-medium text-emerald-300/80 bg-emerald-500/10 px-2 py-0.5 rounded-md">Settled</span>
+                    </div>
+                </div>
+
+                <!-- KPI 3: Average Ride Cost -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/[0.07] transition group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Average Fare</span>
+                        <div class="w-9 h-9 rounded-xl bg-brand-500/15 border border-brand-400/20 text-brand-400 flex items-center justify-center group-hover:scale-105 transition">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <h2 id="kpiAvgCost" class="font-mono text-2xl sm:text-3xl font-bold text-white tracking-tight">$0.00</h2>
+                        <span class="text-[11px] font-medium text-indigo-300/80 bg-brand-500/10 px-2 py-0.5 rounded-md">Per Trip</span>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Threshold Alerts -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/[0.07] transition group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Anomaly Alerts</span>
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-400/20 text-amber-400 flex items-center justify-center group-hover:scale-105 transition">
+                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <div class="flex items-baseline gap-2">
+                            <h2 id="kpiAlerts" class="font-mono text-2xl sm:text-3xl font-bold text-amber-400 tracking-tight">0</h2>
+                            <span id="kpiThresholdLabel" class="font-mono text-xs text-slate-400">(&gt; $100)</span>
+                        </div>
+                        <button onclick="toggleFilterAlertsOnly()" class="text-[11px] font-semibold text-amber-300 hover:underline">
+                            Inspect &rarr;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast Notification Container (Replaces alert()) -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <!-- ===================================================================== -->
+    <!-- MAIN BENTO-GRID WORKSPACE                                             -->
+    <!-- ===================================================================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- LEFT BENTO COLUMN (5 Cols): Smart Split Composer & Rider Balances -->
+            <div class="lg:col-span-5 space-y-6">
+
+                <!-- BENTO CARD 1: Smart Ride Split Composer -->
+                <div class="bg-white dark:bg-obsidian-850 rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-bento dark:shadow-bento-dark overflow-hidden transition-colors">
+                    <div class="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/70 dark:bg-white/[0.02]">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </span>
+                            <div>
+                                <h3 class="font-display font-bold text-slate-900 dark:text-white text-sm sm:text-base">Log New Ride Split</h3>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400">Instant equal or proportional custom allocation</p>
+                            </div>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-500/20">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Auto-Save
+                        </span>
+                    </div>
+
+                    <form id="rideForm" class="p-6 space-y-4" novalidate>
+                        <!-- Origin & Destination Inputs with Visual Route Connector -->
+                        <div class="space-y-3 bg-slate-50/80 dark:bg-obsidian-900/70 p-3.5 rounded-2xl border border-slate-200/70 dark:border-white/10">
+                            <!-- Pickup Origin Row -->
+                            <div class="flex items-stretch gap-3">
+                                <div class="w-4 flex flex-col items-center shrink-0 pt-5">
+                                    <span class="w-3.5 h-3.5 rounded-full border-[3px] border-brand-500 bg-white dark:bg-obsidian-900 shrink-0"></span>
+                                    <div class="w-0.5 h-5 border-l-2 border-dashed border-slate-300 dark:border-slate-600 mb-1"></div>
+                                </div>
+                                <div class="flex-grow pb-1">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Pickup Origin *</label>
+                                    <input type="text" id="sourceInput" placeholder="e.g., Campus Gate" required
+                                        class="w-full bg-white dark:bg-obsidian-850 px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition">
+                                </div>
+                            </div>
+
+                            <!-- Drop-off Destination Row -->
+                            <div class="flex items-stretch gap-3">
+                                <div class="w-4 flex flex-col items-center shrink-0">
+                                    <div class="w-0.5 h-5 border-l-2 border-dashed border-slate-300 dark:border-slate-600 mb-1"></div>
+                                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20 shrink-0"></span>
+                                </div>
+                                <div class="flex-grow">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Drop-off Destination *</label>
+                                    <input type="text" id="destInput" placeholder="e.g., International Airport" required
+                                        class="w-full bg-white dark:bg-obsidian-850 px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Ride Fare Input -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-semibold text-slate-700 dark:text-slate-300">Total Ride Cost *</label>
+                                <span class="text-[11px] font-mono text-slate-400">USD ($)</span>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono font-bold text-base">$</span>
+                                <input type="number" id="costInput" placeholder="0.00" step="0.01" min="0.01" required
+                                    class="w-full pl-8 pr-4 py-2.5 font-mono text-base font-bold rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition">
+                            </div>
+                        </div>
+
+                        <!-- Split Mode Segmented Pill Control -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Allocation Method</label>
+                            <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 dark:bg-obsidian-900 rounded-xl border border-slate-200/70 dark:border-white/10">
+                                <button type="button" id="btnModeEqual" onclick="setSplitMode('equal')"
+                                    class="py-2 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-obsidian-850 text-brand-600 dark:text-brand-400 shadow-sm transition flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-equals"></i> Equal Split
+                                </button>
+                                <button type="button" id="btnModeUnequal" onclick="setSplitMode('unequal')"
+                                    class="py-2 px-3 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-sliders"></i> Custom Unequal
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick-Pick Existing Riders Bar with Edit Option -->
+                        <div id="quickPickContainer" class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Quick-Add Riders:</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] text-slate-400">Click to toggle</span>
+                                    <button type="button" id="btnToggleEditRiders" onclick="toggleEditRiderNamesMode()"
+                                        class="text-[10px] font-semibold px-2 py-0.5 rounded-md border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition flex items-center gap-1"
+                                        title="Edit rider names">
+                                        <i class="fa-solid fa-pen text-[9px]"></i>
+                                        <span id="editRidersBtnLabel">Edit Names</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="quickPickChips" class="flex flex-wrap gap-1.5">
+                                <!-- Injected dynamically from known passengers -->
+                            </div>
+                        </div>
+
+                        <!-- Mode 1: Equal Split Panel -->
+                        <div id="equalSplitPanel" class="space-y-2">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Passengers (comma-separated) *</label>
+                            <input type="text" id="equalPassengersInput" placeholder="e.g., Alice, Bob, Charlie"
+                                class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition">
+                            <div class="p-2.5 rounded-xl bg-brand-50/70 dark:bg-brand-500/10 border border-brand-100 dark:border-brand-500/20">
+                                <p id="equalPreviewText" class="text-xs text-slate-600 dark:text-slate-300">Enter cost and passengers to preview split.</p>
+                            </div>
+                        </div>
+
+                        <!-- Mode 2: Custom Unequal Split Panel -->
+                        <div id="unequalSplitPanel" class="hidden space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Custom Passenger Shares</label>
+                                <button type="button" onclick="addCustomPassengerRow()"
+                                    class="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
+                                    <i class="fa-solid fa-plus-circle"></i> Add Person
+                                </button>
+                            </div>
+                            <div id="customRowsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                                <!-- Dynamic rows injected here -->
+                            </div>
+                            <!-- Proportional Auto-Adjustment Warning Box -->
+                            <div id="unequalWarningBox" class="hidden p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2">
+                                <i class="fa-solid fa-scale-unbalanced text-amber-500 mt-0.5"></i>
+                                <span id="unequalWarningText"></span>
+                            </div>
+                        </div>
+
+                        <!-- Inline Validation Error Display -->
+                        <div id="formErrorBox" class="hidden p-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+                            <span id="formErrorText"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="w-full py-3 px-4 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-display font-bold text-sm rounded-xl shadow-glow transition transform active:scale-[0.99] flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Calculate & Record Ride</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- BENTO CARD 2: Individual Balances & Visual Spend Donut Analytics -->
+                <div class="bg-white dark:bg-obsidian-850 rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-bento dark:shadow-bento-dark p-6 transition-colors">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-display font-bold text-slate-900 dark:text-white text-base">Rider Spend Breakdown</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Net share distribution & quick settle-up</p>
+                        </div>
+                        <span class="font-mono bg-brand-50 dark:bg-brand-500/15 text-brand-600 dark:text-brand-300 border border-brand-200/60 dark:border-brand-500/20 text-xs font-bold px-2.5 py-1 rounded-xl" id="passengerCountBadge">0 Riders</span>
+                    </div>
+
+                    <!-- Interactive SVG Donut Chart + Legend Overview -->
+                    <div id="spendDonutWrapper" class="mb-5 p-4 rounded-2xl bg-slate-50 dark:bg-obsidian-900/80 border border-slate-200/70 dark:border-white/10 flex flex-col sm:flex-row items-center gap-4">
+                        <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
+                            <svg id="spendDonutSvg" viewBox="0 0 36 36" class="w-full h-full -rotate-90 transform">
+                                <!-- Segments injected via JS -->
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Total</span>
+                                <span id="donutCenterTotal" class="font-mono text-xs font-bold text-slate-900 dark:text-white">$0</span>
+                            </div>
+                        </div>
+                        <div id="donutLegend" class="flex-grow w-full space-y-1.5 text-xs">
+                            <!-- Top rider legend pills -->
+                        </div>
+                    </div>
+
+                    <!-- Detailed Individual Rider Cards with Settle-Up Copy & Edit Name Action -->
+                    <div id="individualBalancesList" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT BENTO COLUMN (7 Cols): Search, Filter & Visual Route Ledger -->
+            <div class="lg:col-span-7 space-y-4">
+                <div class="bg-white dark:bg-obsidian-850 rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-bento dark:shadow-bento-dark overflow-hidden transition-colors">
+                    
+                    <!-- Ledger Header & Controls -->
+                    <div class="p-5 sm:p-6 border-b border-slate-100 dark:border-white/10 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h3 class="font-display font-bold text-slate-900 dark:text-white text-base sm:text-lg">Mobility Ledger</h3>
+                                    <span id="visibleCountPill" class="font-mono text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">0</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Real-time trip audit log with automated cost anomaly detection</p>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button onclick="toggleFilterAlertsOnly()" id="btnAlertFilter"
+                                    class="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+                                    <span>Alerts Only</span>
+                                </button>
+                                <button onclick="confirmResetSampleData()"
+                                    class="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition flex items-center gap-1.5"
+                                    title="Restore default sample rides">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    <span>Reset Demo</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Search Bar & Mobile Threshold Setting -->
+                        <div class="flex flex-col sm:flex-row gap-2.5">
+                            <div class="relative flex-grow">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="searchInput" placeholder="Filter by Ride ID, origin, destination, or rider name..."
+                                    class="w-full pl-9 pr-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition">
+                            </div>
+
+                            <!-- Mobile Alert Limit Input -->
+                            <div class="flex md:hidden items-center justify-between bg-slate-50 dark:bg-obsidian-900 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-white/10">
+                                <label for="thresholdInputMobile" class="text-xs font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-amber-400"></span> Alert Limit ($):
+                                </label>
+                                <input type="number" id="thresholdInputMobile" value="100" min="1"
+                                    class="w-20 bg-white dark:bg-obsidian-850 font-mono text-xs font-bold text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-white/10 text-right">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Responsive Ledger Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/90 dark:bg-obsidian-900/70 border-b border-slate-200/80 dark:border-white/10 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    <th class="py-3.5 px-4">Trip ID & Time</th>
+                                    <th class="py-3.5 px-4">Route Trajectory</th>
+                                    <th class="py-3.5 px-4">Fare</th>
+                                    <th class="py-3.5 px-4">Passenger Shares</th>
+                                    <th class="py-3.5 px-4 text-right">Manage</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordsTableBody" class="divide-y divide-slate-100 dark:divide-white/5 text-sm">
+                                <!-- Rows dynamically rendered -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyStateBox" class="hidden py-14 px-4 text-center">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-400 flex items-center justify-center mx-auto mb-3 text-xl border border-slate-200/60 dark:border-white/10">
+                            <i class="fa-solid fa-compass"></i>
+                        </div>
+                        <h4 class="font-display text-sm font-bold text-slate-800 dark:text-white">No matching ride records</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">Adjust your search filters or log a new shared ride from the composer panel.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-white/10 py-5 mt-8 bg-white/60 dark:bg-obsidian-900/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-2">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span><strong class="text-slate-700 dark:text-slate-200">SplitRide Pro</strong> • LocalStorage Encrypted Persistence</span>
+            </div>
+            <p class="font-mono text-[11px]">FutureReady Hack • Mobility & FinTech</p>
+        </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 1: BULK CSV DATASET IMPORT                                      -->
+    <!-- ===================================================================== -->
+    <div id="csvModal" class="fixed inset-0 bg-obsidian-950/70 backdrop-blur-md z-40 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-obsidian-850 rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-white/15 overflow-hidden animate-toast">
+            <div class="px-6 py-4 bg-obsidian-900 text-white flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                        <i class="fa-solid fa-file-csv"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-sm sm:text-base">Bulk CSV Dataset Import</h3>
+                        <p class="text-[11px] text-slate-400">Batch validate & ingest ride records</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('csvModal')" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Upload a <code class="font-mono bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded">.csv</code> file or paste CSV rows below. Required schema:
+                    <code class="font-mono bg-brand-50 dark:bg-brand-500/15 text-brand-700 dark:text-brand-300 px-1.5 py-0.5 rounded font-semibold">ride_id,date,source,destination,total_cost,passengers</code>
+                    (separate multiple riders with <code class="font-mono">;</code> or quotes).
+                </p>
+
+                <!-- File Upload Dropzone -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50 dark:bg-obsidian-900 p-3.5 rounded-xl border border-dashed border-slate-300 dark:border-white/20">
+                    <input type="file" id="csvFileInput" accept=".csv" class="text-xs text-slate-600 dark:text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-500 cursor-pointer">
+                    <button type="button" onclick="loadSampleCsvIntoTextarea()" class="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline whitespace-nowrap text-left sm:text-right">
+                        + Load Sample CSV
+                    </button>
+                </div>
+
+                <!-- CSV Textarea -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">CSV Payload</label>
+                    <textarea id="csvTextarea" rows="5" placeholder="ride_id,date,source,destination,total_cost,passengers&#10;RIDE-201,2026-11-18 09:30,Central Station,Tech Park,42.00,Alice;Bob;Charlie"
+                        class="w-full p-3 text-xs font-mono rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <!-- Row-by-Row Validation Error Log -->
+                <div id="csvImportLogBox" class="hidden p-3.5 rounded-xl bg-obsidian-950 border border-white/10 text-slate-200 text-xs font-mono max-h-36 overflow-y-auto space-y-1">
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('csvModal')" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 rounded-xl transition">
+                        Close
+                    </button>
+                    <button type="button" onclick="processBulkCsvImport()" class="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-glow-emerald transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Validate & Import</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 2: MULTI-FORMAT REPORT EXPORT                                   -->
+    <!-- ===================================================================== -->
+    <div id="exportModal" class="fixed inset-0 bg-obsidian-950/70 backdrop-blur-md z-40 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-obsidian-850 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-white/15 overflow-hidden animate-toast">
+            <div class="px-6 py-4 bg-obsidian-900 text-white flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center">
+                        <i class="fa-solid fa-file-export"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-sm sm:text-base">Executive Report Export</h3>
+                        <p class="text-[11px] text-slate-400">Download standardized financial audit logs</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('exportModal')" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button onclick="downloadReport('markdown')" class="p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-obsidian-900/60 hover:border-brand-500 hover:bg-brand-50/50 dark:hover:bg-brand-500/10 transition text-left group">
+                        <i class="fa-brands fa-markdown text-2xl text-brand-600 dark:text-brand-400 mb-2 group-hover:scale-110 transition-transform inline-block"></i>
+                        <div class="font-display font-bold text-xs text-slate-900 dark:text-white">Markdown (.md)</div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Executive briefing</div>
+                    </button>
+
+                    <button onclick="downloadReport('csv')" class="p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-obsidian-900/60 hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-500/10 transition text-left group">
+                        <i class="fa-solid fa-table text-2xl text-emerald-600 dark:text-emerald-400 mb-2 group-hover:scale-110 transition-transform inline-block"></i>
+                        <div class="font-display font-bold text-xs text-slate-900 dark:text-white">Spreadsheet (.csv)</div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Tabular audit log</div>
+                    </button>
+
+                    <button onclick="downloadReport('json')" class="p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-obsidian-900/60 hover:border-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-500/10 transition text-left group">
+                        <i class="fa-solid fa-code text-2xl text-amber-600 dark:text-amber-400 mb-2 group-hover:scale-110 transition-transform inline-block"></i>
+                        <div class="font-display font-bold text-xs text-slate-900 dark:text-white">Raw JSON (.json)</div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Structured schema</div>
+                    </button>
+                </div>
+
+                <!-- Live Markdown Preview -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="text-xs font-semibold text-slate-700 dark:text-slate-300">Executive Summary Preview</label>
+                        <button onclick="copyMarkdownToClipboard()" class="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
+                            <i class="fa-regular fa-copy"></i> Copy Summary
+                        </button>
+                    </div>
+                    <textarea id="markdownPreviewArea" rows="6" readonly
+                        class="w-full p-3 text-xs font-mono bg-slate-50 dark:bg-obsidian-900 rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 focus:outline-none"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 3: CONFIRM RESET SAMPLE DATA (Replaces confirm())               -->
+    <!-- ===================================================================== -->
+    <div id="resetConfirmModal" class="fixed inset-0 bg-obsidian-950/70 backdrop-blur-md z-40 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-obsidian-850 rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-white/15 space-y-4 animate-toast">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </div>
+                <div>
+                    <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">Reset Demo Dataset?</h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Restore pre-seeded hackathon records</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                This will replace your current ride records with the pre-seeded dataset (including normal equal/unequal splits and a <span class="font-mono font-semibold">&gt;$100</span> threshold anomaly).
+            </p>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeModal('resetConfirmModal')" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 rounded-xl transition">
+                    Cancel
+                </button>
+                <button onclick="executeResetSampleData()" class="px-4 py-2 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-500 rounded-xl transition">
+                    Yes, Restore Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 4: EDIT RIDER NAME                                              -->
+    <!-- ===================================================================== -->
+    <div id="editRiderModal" class="fixed inset-0 bg-obsidian-950/70 backdrop-blur-md z-40 hidden flex items-center justify-center p-4">
+        <form id="editRiderForm" onsubmit="submitRiderRename(event)" class="bg-white dark:bg-obsidian-850 rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-white/15 space-y-4 animate-toast">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-100 dark:bg-brand-500/15 text-brand-600 dark:text-brand-400 flex items-center justify-center text-base">
+                        <i class="fa-solid fa-user-pen"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">Edit Rider Name</h3>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Updates quick-pick bar & all trip records</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('editRiderModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1.5 rounded-lg transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Current Name</label>
+                    <input type="text" id="editRiderOldName" readonly
+                        class="w-full px-3.5 py-2 text-sm font-semibold rounded-xl bg-slate-100 dark:bg-obsidian-950 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 cursor-not-allowed">
+                </div>
+                <div>
+                    <label for="editRiderNewName" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">New Rider Name *</label>
+                    <input type="text" id="editRiderNewName" required placeholder="Enter updated name..."
+                        class="w-full px-3.5 py-2.5 text-sm font-semibold rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition">
+                </div>
+                <p id="editRiderError" class="hidden text-xs text-red-500 font-medium"></p>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="closeModal('editRiderModal')" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 rounded-xl transition">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-500 rounded-xl shadow-glow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Save Name</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- APPLICATION LOGIC (100% PRESERVED + RIDER NAME EDITING)               -->
+    <!-- ===================================================================== -->
+    <script>
+        /**
+         * Constants & Application State
+         */
+        const STORAGE_KEY = 'ride_share_splitter_records_v1';
+        const THRESHOLD_KEY = 'ride_share_splitter_threshold_v1';
+        const THEME_KEY = 'splitride_pro_theme_v1';
+        const DEFAULT_RIDERS_KEY = 'splitride_pro_default_riders_v1';
+
+        const RIDER_PALETTE = [
+            '#6366f1', // Indigo
+            '#10b981', // Emerald
+            '#f59e0b', // Amber
+            '#ec4899', // Pink
+            '#06b6d4', // Cyan
+            '#8b5cf6', // Violet
+            '#f97316', // Orange
+            '#14b8a6'  // Teal
+        ];
+
+        let records = [];
+        let defaultRiders = ["Alice", "Bob", "Charlie", "Diana", "Evan"];
+        let currentSplitMode = 'equal'; // 'equal' | 'unequal'
+        let filterAlertsOnly = false;
+        let isEditingRiderNames = false;
+        let costThreshold = 100.00;
+
+        /**
+         * Pre-seeded realistic dataset for hackathon demo
+         */
+        const SAMPLE_RECORDS = [
+            {
+                ride_id: "RIDE-001",
+                date: "2026-11-15 08:45",
+                source: "University Dorms",
+                destination: "Innovation Hub",
+                total_cost: 24.00,
+                split_mode: "equal",
+                shares: { "Alice": 8.00, "Bob": 8.00, "Charlie": 8.00 }
+            },
+            {
+                ride_id: "RIDE-002",
+                date: "2026-11-16 14:20",
+                source: "Downtown Metro",
+                destination: "International Airport",
+                total_cost: 128.50, // > $100 Threshold Anomaly Entry
+                split_mode: "unequal",
+                shares: { "Alice": 68.50, "Diana": 60.00 }
+            },
+            {
+                ride_id: "RIDE-003",
+                date: "2026-11-17 19:10",
+                source: "Tech Conference Center",
+                destination: "Harbor Dining District",
+                total_cost: 45.00,
+                split_mode: "equal",
+                shares: { "Bob": 15.00, "Charlie": 15.00, "Diana": 15.00 }
+            },
+            {
+                ride_id: "RIDE-004",
+                date: "2026-11-18 09:05",
+                source: "Northside Station",
+                destination: "City Library",
+                total_cost: 18.50,
+                split_mode: "unequal",
+                shares: { "Alice": 10.50, "Evan": 8.00 }
+            }
+        ];
+
+        /**
+         * Initialize Application on Window Load
+         */
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            loadStateFromStorage();
+            initCustomPassengerRows();
+            attachEventListeners();
+            renderDashboard();
+        });
+
+        /**
+         * Theme Management (Luminous Alabaster vs Electric Obsidian Dark Mode)
+         */
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_KEY);
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                updateThemeIcon(true);
+            } else {
+                document.documentElement.classList.remove('dark');
+                updateThemeIcon(false);
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const icon = document.getElementById('themeIcon');
+            if (isDark) {
+                icon.className = 'fa-solid fa-sun text-amber-300 text-sm';
+            } else {
+                icon.className = 'fa-solid fa-moon text-slate-300 text-sm';
+            }
+        }
+
+        /**
+         * LocalStorage Persistence Functions
+         */
+        function loadStateFromStorage() {
+            try {
+                const savedThreshold = localStorage.getItem(THRESHOLD_KEY);
+                if (savedThreshold && !isNaN(parseFloat(savedThreshold))) {
+                    costThreshold = parseFloat(savedThreshold);
+                }
+                syncThresholdInputs(costThreshold);
+
+                const savedDefaultRiders = localStorage.getItem(DEFAULT_RIDERS_KEY);
+                if (savedDefaultRiders) {
+                    const parsedRiders = JSON.parse(savedDefaultRiders);
+                    if (Array.isArray(parsedRiders) && parsedRiders.length > 0) {
+                        defaultRiders = parsedRiders;
+                    }
+                }
+
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) {
+                        records = parsed;
+                        return;
+                    }
+                }
+                records = JSON.parse(JSON.stringify(SAMPLE_RECORDS));
+                saveRecordsToStorage();
+            } catch (err) {
+                console.error("Storage corruption detected, initializing clean sample state:", err);
+                records = JSON.parse(JSON.stringify(SAMPLE_RECORDS));
+                saveRecordsToStorage();
+            }
+        }
+
+        function saveRecordsToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+                localStorage.setItem(DEFAULT_RIDERS_KEY, JSON.stringify(defaultRiders));
+            } catch (err) {
+                showToast("Warning: Could not persist data to browser LocalStorage.", "error");
+            }
+        }
+
+        /**
+         * Sync Desktop and Mobile Threshold Alert Inputs
+         */
+        function syncThresholdInputs(val) {
+            document.getElementById('thresholdInput').value = val;
+            document.getElementById('thresholdInputMobile').value = val;
+            document.getElementById('kpiThresholdLabel').textContent = `(> $${val.toFixed(0)})`;
+        }
+
+        function handleThresholdChange(e) {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val) && val > 0) {
+                costThreshold = val;
+                localStorage.setItem(THRESHOLD_KEY, costThreshold.toString());
+                syncThresholdInputs(costThreshold);
+                renderDashboard();
+            }
+        }
+
+        /**
+         * Attach Interactive Event Listeners
+         */
+        function attachEventListeners() {
+            document.getElementById('rideForm').addEventListener('submit', handleFormSubmit);
+            document.getElementById('searchInput').addEventListener('input', renderRecordsTable);
+            document.getElementById('thresholdInput').addEventListener('input', handleThresholdChange);
+            document.getElementById('thresholdInputMobile').addEventListener('input', handleThresholdChange);
+
+            document.getElementById('costInput').addEventListener('input', updateLiveSplitPreviews);
+            document.getElementById('equalPassengersInput').addEventListener('input', () => {
+                updateLiveSplitPreviews();
+                renderQuickPickChips();
+            });
+
+            document.getElementById('csvFileInput').addEventListener('change', handleCsvFileUpload);
+        }
+
+        /**
+         * Split Mode Switching ('equal' vs 'unequal')
+         */
+        function setSplitMode(mode) {
+            currentSplitMode = mode;
+            const btnEqual = document.getElementById('btnModeEqual');
+            const btnUnequal = document.getElementById('btnModeUnequal');
+            const panelEqual = document.getElementById('equalSplitPanel');
+            const panelUnequal = document.getElementById('unequalSplitPanel');
+
+            if (mode === 'equal') {
+                btnEqual.className = "py-2 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-obsidian-850 text-brand-600 dark:text-brand-400 shadow-sm transition flex items-center justify-center gap-1.5";
+                btnUnequal.className = "py-2 px-3 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center gap-1.5";
+                panelEqual.classList.remove('hidden');
+                panelUnequal.classList.add('hidden');
+            } else {
+                btnUnequal.className = "py-2 px-3 text-xs font-semibold rounded-lg bg-white dark:bg-obsidian-850 text-brand-600 dark:text-brand-400 shadow-sm transition flex items-center justify-center gap-1.5";
+                btnEqual.className = "py-2 px-3 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center gap-1.5";
+                panelUnequal.classList.remove('hidden');
+                panelEqual.classList.add('hidden');
+            }
+            hideFormError();
+            updateLiveSplitPreviews();
+            renderQuickPickChips();
+        }
+
+        /**
+         * One-Click Passenger Quick-Pick Chips & Rider Name Editing
+         */
+        function getKnownPassengers() {
+            const set = new Set(defaultRiders);
+            records.forEach(r => {
+                Object.keys(r.shares).forEach(p => set.add(p));
+            });
+            return Array.from(set);
+        }
+
+        function toggleEditRiderNamesMode() {
+            isEditingRiderNames = !isEditingRiderNames;
+            const btn = document.getElementById('btnToggleEditRiders');
+            const label = document.getElementById('editRidersBtnLabel');
+
+            if (isEditingRiderNames) {
+                btn.className = "text-[10px] font-semibold px-2 py-0.5 rounded-md border border-brand-500 bg-brand-600 text-white transition flex items-center gap-1 shadow-sm";
+                label.textContent = "Done Editing";
+            } else {
+                btn.className = "text-[10px] font-semibold px-2 py-0.5 rounded-md border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition flex items-center gap-1";
+                label.textContent = "Edit Names";
+            }
+            renderQuickPickChips();
+        }
+
+        function openEditRiderModal(oldName) {
+            document.getElementById('editRiderOldName').value = oldName;
+            const newInput = document.getElementById('editRiderNewName');
+            newInput.value = oldName;
+            document.getElementById('editRiderError').classList.add('hidden');
+            openModal('editRiderModal');
+            setTimeout(() => {
+                newInput.focus();
+                newInput.select();
+            }, 50);
+        }
+
+        function submitRiderRename(e) {
+            e.preventDefault();
+            const oldName = document.getElementById('editRiderOldName').value.trim();
+            const newName = document.getElementById('editRiderNewName').value.trim();
+            const errEl = document.getElementById('editRiderError');
+
+            if (!newName) {
+                errEl.textContent = "Rider name cannot be empty.";
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (oldName === newName) {
+                closeModal('editRiderModal');
+                return;
+            }
+
+            // 1. Update defaultRiders list (replace or deduplicate)
+            const idx = defaultRiders.findIndex(r => r.toLowerCase() === oldName.toLowerCase());
+            if (idx > -1) {
+                defaultRiders[idx] = newName;
+            }
+            // Deduplicate case-insensitively while preserving order
+            const uniqueDefaults = [];
+            const seen = new Set();
+            defaultRiders.forEach(name => {
+                const key = name.toLowerCase();
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    uniqueDefaults.push(name);
+                }
+            });
+            defaultRiders = uniqueDefaults;
+
+            // 2. Update all historical ride records (merging shares if newName already exists on a trip)
+            let updatedTrips = 0;
+            records.forEach(record => {
+                const updatedShares = {};
+                let changed = false;
+                Object.entries(record.shares).forEach(([rider, amount]) => {
+                    if (rider.toLowerCase() === oldName.toLowerCase()) {
+                        updatedShares[newName] = Math.round(((updatedShares[newName] || 0) + amount) * 100) / 100;
+                        changed = true;
+                    } else {
+                        updatedShares[rider] = Math.round(((updatedShares[rider] || 0) + amount) * 100) / 100;
+                    }
+                });
+                if (changed) {
+                    record.shares = updatedShares;
+                    updatedTrips++;
+                }
+            });
+
+            // 3. Update active Equal Split text input if oldName is present
+            const equalInput = document.getElementById('equalPassengersInput');
+            if (equalInput.value.trim()) {
+                const parts = equalInput.value.split(',').map(p => p.trim()).filter(Boolean);
+                const mapped = parts.map(p => p.toLowerCase() === oldName.toLowerCase() ? newName : p);
+                equalInput.value = [...new Set(mapped)].join(', ');
+            }
+
+            // 4. Update active Custom Unequal Split rows if oldName is present
+            document.querySelectorAll('.custom-name-input').forEach(inp => {
+                if (inp.value.trim().toLowerCase() === oldName.toLowerCase()) {
+                    inp.value = newName;
+                }
+            });
+
+            saveRecordsToStorage();
+            updateLiveSplitPreviews();
+            renderDashboard();
+            closeModal('editRiderModal');
+
+            showToast(`Renamed "${oldName}" to "${newName}" across ${updatedTrips} trip(s).`, "success");
+        }
+
+        function renderQuickPickChips() {
+            const container = document.getElementById('quickPickChips');
+            const riders = getKnownPassengers();
+
+            // Determine active names in current mode
+            let activeNames = new Set();
+            if (currentSplitMode === 'equal') {
+                const raw = document.getElementById('equalPassengersInput').value;
+                raw.split(',').map(n => n.trim().toLowerCase()).filter(Boolean).forEach(n => activeNames.add(n));
+            } else {
+                document.querySelectorAll('.custom-name-input').forEach(inp => {
+                    const v = inp.value.trim().toLowerCase();
+                    if (v) activeNames.add(v);
+                });
+            }
+
+            container.innerHTML = riders.map(name => {
+                const isSelected = activeNames.has(name.toLowerCase());
+                const safeName = escapeHtml(name);
+
+                if (isEditingRiderNames) {
+                    return `
+                        <button type="button" onclick="openEditRiderModal('${safeName}')"
+                            title="Click to rename ${safeName}"
+                            class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-brand-400/70 bg-brand-50 dark:bg-brand-500/15 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-500/25 transition flex items-center gap-1.5 shadow-sm">
+                            <span>${safeName}</span>
+                            <i class="fa-solid fa-pen text-[9px] text-brand-500"></i>
+                        </button>
+                    `;
+                }
+
+                const chipClass = isSelected
+                    ? 'bg-brand-600 text-white border-brand-600 shadow-sm'
+                    : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-brand-400';
+
+                return `
+                    <div class="inline-flex items-center rounded-lg border transition overflow-hidden ${chipClass}">
+                        <button type="button" onclick="toggleQuickPickRider('${safeName}')"
+                            class="pl-2.5 pr-1.5 py-1 text-[11px] font-semibold flex items-center gap-1">
+                            <i class="fa-solid ${isSelected ? 'fa-check' : 'fa-plus'} text-[9px]"></i>
+                            <span>${safeName}</span>
+                        </button>
+                        <button type="button" onclick="openEditRiderModal('${safeName}')"
+                            title="Rename ${safeName}"
+                            class="pr-2 pl-1 py-1 text-[9px] opacity-65 hover:opacity-100 transition">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleQuickPickRider(name) {
+            if (currentSplitMode === 'equal') {
+                const input = document.getElementById('equalPassengersInput');
+                let list = input.value.split(',').map(n => n.trim()).filter(Boolean);
+                const existingIdx = list.findIndex(n => n.toLowerCase() === name.toLowerCase());
+
+                if (existingIdx > -1) {
+                    list.splice(existingIdx, 1);
+                } else {
+                    list.push(name);
+                }
+                input.value = list.join(', ');
+                updateLiveSplitPreviews();
+            } else {
+                const rows = Array.from(document.querySelectorAll('.custom-passenger-row'));
+                const existingRow = rows.find(r => r.querySelector('.custom-name-input').value.trim().toLowerCase() === name.toLowerCase());
+
+                if (existingRow) {
+                    if (rows.length > 1) {
+                        existingRow.remove();
+                    } else {
+                        existingRow.querySelector('.custom-name-input').value = '';
+                        existingRow.querySelector('.custom-amount-input').value = '';
+                    }
+                } else {
+                    // Fill first empty row if available, otherwise append new row
+                    const emptyRow = rows.find(r => !r.querySelector('.custom-name-input').value.trim());
+                    if (emptyRow) {
+                        emptyRow.querySelector('.custom-name-input').value = name;
+                    } else {
+                        addCustomPassengerRow(name, '');
+                    }
+                }
+                updateLiveSplitPreviews();
+            }
+            renderQuickPickChips();
+        }
+
+        /**
+         * Dynamic Rows for Custom Unequal Shares
+         */
+        function initCustomPassengerRows() {
+            const container = document.getElementById('customRowsContainer');
+            container.innerHTML = '';
+            addCustomPassengerRow(defaultRiders[0] || 'Alice', '');
+            addCustomPassengerRow(defaultRiders[1] || 'Bob', '');
+        }
+
+        function addCustomPassengerRow(defaultName = '', defaultAmount = '') {
+            const container = document.getElementById('customRowsContainer');
+            const row = document.createElement('div');
+            row.className = "flex items-center gap-2 custom-passenger-row";
+            row.innerHTML = `
+                <input type="text" placeholder="Passenger Name" value="${escapeHtml(defaultName)}"
+                    class="custom-name-input flex-grow px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
+                <div class="relative w-28">
+                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 font-mono text-xs">$</span>
+                    <input type="number" placeholder="0.00" step="0.01" min="0" value="${defaultAmount}"
+                        class="custom-amount-input w-full pl-6 pr-2 py-2 font-mono text-xs font-bold rounded-xl bg-slate-50 dark:bg-obsidian-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <button type="button" onclick="removeCustomPassengerRow(this)"
+                    class="p-2 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition" title="Remove row">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
+                </button>
+            `;
+            row.querySelector('.custom-amount-input').addEventListener('input', updateLiveSplitPreviews);
+            row.querySelector('.custom-name-input').addEventListener('input', renderQuickPickChips);
+            container.appendChild(row);
+            renderQuickPickChips();
+        }
+
+        function removeCustomPassengerRow(btn) {
+            const container = document.getElementById('customRowsContainer');
+            if (container.children.length > 1) {
+                btn.parentElement.remove();
+                updateLiveSplitPreviews();
+                renderQuickPickChips();
+            } else {
+                showToast("At least one passenger row is required.", "warning");
+            }
+        }
+
+        /**
+         * Live Calculation & Proportional Adjustment Warning Preview
+         */
+        function updateLiveSplitPreviews() {
+            const totalCost = parseFloat(document.getElementById('costInput').value);
+
+            if (currentSplitMode === 'equal') {
+                const rawNames = document.getElementById('equalPassengersInput').value;
+                const names = rawNames.split(',').map(n => n.trim()).filter(Boolean);
+                const previewEl = document.getElementById('equalPreviewText');
+
+                if (!isNaN(totalCost) && totalCost > 0 && names.length > 0) {
+                    const perPerson = (totalCost / names.length).toFixed(2);
+                    previewEl.innerHTML = `Splitting <strong class="font-mono">$${totalCost.toFixed(2)}</strong> among <strong>${names.length}</strong> rider(s) = <span class="font-mono text-brand-600 dark:text-brand-400 font-bold">$${perPerson} each</span>`;
+                } else {
+                    previewEl.textContent = "Enter cost and passengers to preview split.";
+                }
+            } else {
+                const warningBox = document.getElementById('unequalWarningBox');
+                const warningText = document.getElementById('unequalWarningText');
+                const amountInputs = document.querySelectorAll('.custom-amount-input');
+                let sumShares = 0;
+
+                amountInputs.forEach(inp => {
+                    const v = parseFloat(inp.value);
+                    if (!isNaN(v) && v >= 0) sumShares += v;
+                });
+
+                if (!isNaN(totalCost) && totalCost > 0 && sumShares > 0 && Math.abs(sumShares - totalCost) > 0.01) {
+                    warningBox.classList.remove('hidden');
+                    warningText.innerHTML = `Custom shares sum to <strong class="font-mono">$${sumShares.toFixed(2)}</strong> vs total fare <strong class="font-mono">$${totalCost.toFixed(2)}</strong>. Shares will proportionally scale on save.`;
+                } else {
+                    warningBox.classList.add('hidden');
+                }
+            }
+        }
+
+        /**
+         * Form Submission with Defensive Input Validation
+         */
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            hideFormError();
+
+            const source = document.getElementById('sourceInput').value.trim();
+            const destination = document.getElementById('destInput').value.trim();
+            const totalCost = parseFloat(document.getElementById('costInput').value);
+
+            if (!source || !destination) {
+                return showFormError("Please enter both a Pickup Origin and a Drop-off Destination.");
+            }
+
+            if (isNaN(totalCost) || totalCost <= 0) {
+                return showFormError("Total Ride Cost must be a valid number greater than $0.00.");
+            }
+
+            let sharesMap = {};
+
+            if (currentSplitMode === 'equal') {
+                const rawNames = document.getElementById('equalPassengersInput').value;
+                const names = [...new Set(rawNames.split(',').map(n => n.trim()).filter(Boolean))];
+
+                if (names.length === 0) {
+                    return showFormError("Please enter at least one valid passenger name.");
+                }
+
+                const baseShare = Math.floor((totalCost / names.length) * 100) / 100;
+                let remainder = Math.round((totalCost - baseShare * names.length) * 100) / 100;
+
+                names.forEach((name, idx) => {
+                    let amt = baseShare;
+                    if (idx === 0 && remainder !== 0) {
+                        amt = Math.round((amt + remainder) * 100) / 100;
+                    }
+                    sharesMap[name] = amt;
+                });
+
+            } else {
+                const rows = document.querySelectorAll('.custom-passenger-row');
+                const entries = [];
+
+                for (const row of rows) {
+                    const name = row.querySelector('.custom-name-input').value.trim();
+                    const amount = parseFloat(row.querySelector('.custom-amount-input').value);
+
+                    if (!name && isNaN(amount)) continue;
+                    if (!name) {
+                        return showFormError("All custom share rows with an amount must include a passenger name.");
+                    }
+                    if (isNaN(amount) || amount < 0) {
+                        return showFormError(`Invalid share amount for ${name}. Must be $0.00 or greater.`);
+                    }
+                    entries.push({ name, amount });
+                }
+
+                if (entries.length === 0) {
+                    return showFormError("Please enter at least one passenger and share amount.");
+                }
+
+                const rawSum = entries.reduce((acc, item) => acc + item.amount, 0);
+                if (rawSum <= 0) {
+                    return showFormError("Total of custom passenger shares must be greater than $0.00.");
+                }
+
+                const needsAdjustment = Math.abs(rawSum - totalCost) > 0.01;
+                const factor = needsAdjustment ? (totalCost / rawSum) : 1;
+
+                let runningTotal = 0;
+                entries.forEach((item, idx) => {
+                    let adjusted = Math.round(item.amount * factor * 100) / 100;
+                    if (idx === entries.length - 1 && needsAdjustment) {
+                        adjusted = Math.round((totalCost - runningTotal) * 100) / 100;
+                    }
+                    runningTotal += adjusted;
+                    sharesMap[item.name] = (sharesMap[item.name] || 0) + adjusted;
+                });
+
+                if (needsAdjustment) {
+                    showToast("Custom shares proportionally scaled to match total fare.", "warning");
+                }
+            }
+
+            // Generate unique Ride ID
+            const maxExistingNum = records.reduce((max, r) => {
+                const match = r.ride_id.match(/RIDE-(\d+)/i);
+                return match ? Math.max(max, parseInt(match[1], 10)) : max;
+            }, records.length);
+            const rideId = `RIDE-${String(maxExistingNum + 1).padStart(3, '0')}`;
+
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            const newRecord = {
+                ride_id: rideId,
+                date: formattedDate,
+                source,
+                destination,
+                total_cost: Math.round(totalCost * 100) / 100,
+                split_mode: currentSplitMode,
+                shares: sharesMap
+            };
+
+            records.unshift(newRecord);
+            saveRecordsToStorage();
+            renderDashboard();
+
+            document.getElementById('rideForm').reset();
+            initCustomPassengerRows();
+            updateLiveSplitPreviews();
+            renderQuickPickChips();
+
+            if (newRecord.total_cost > costThreshold) {
+                showToast(`Saved ${rideId} — Anomaly Flagged (> $${costThreshold.toFixed(2)})!`, "warning");
+            } else {
+                showToast(`Trip ${rideId} recorded & synced!`, "success");
+            }
+        }
+
+        function showFormError(msg) {
+            const box = document.getElementById('formErrorBox');
+            document.getElementById('formErrorText').textContent = msg;
+            box.classList.remove('hidden');
+        }
+
+        function hideFormError() {
+            document.getElementById('formErrorBox').classList.add('hidden');
+        }
+
+        /**
+         * Delete Single Record
+         */
+        function deleteRecord(rideId) {
+            records = records.filter(r => r.ride_id !== rideId);
+            saveRecordsToStorage();
+            renderDashboard();
+            showToast(`Removed trip ${rideId} from ledger.`, "info");
+        }
+
+        /**
+         * Reset Demo Dataset Flow
+         */
+        function confirmResetSampleData() {
+            openModal('resetConfirmModal');
+        }
+
+        function executeResetSampleData() {
+            records = JSON.parse(JSON.stringify(SAMPLE_RECORDS));
+            defaultRiders = ["Alice", "Bob", "Charlie", "Diana", "Evan"];
+            saveRecordsToStorage();
+            filterAlertsOnly = false;
+            document.getElementById('searchInput').value = '';
+            updateAlertFilterButtonUI();
+            renderDashboard();
+            closeModal('resetConfirmModal');
+            showToast("Demo mobility dataset restored.", "success");
+        }
+
+        /**
+         * Toggle "Alerts Only" Filter
+         */
+        function toggleFilterAlertsOnly() {
+            filterAlertsOnly = !filterAlertsOnly;
+            updateAlertFilterButtonUI();
+            renderRecordsTable();
+        }
+
+        function updateAlertFilterButtonUI() {
+            const btn = document.getElementById('btnAlertFilter');
+            if (filterAlertsOnly) {
+                btn.className = "px-3 py-2 text-xs font-semibold rounded-xl border border-amber-400 bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 transition flex items-center gap-1.5 shadow-sm";
+            } else {
+                btn.className = "px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition flex items-center gap-1.5";
+            }
+        }
+
+        /**
+         * Master Render Function
+         */
+        function renderDashboard() {
+            renderSummaryKPIs();
+            renderIndividualBalances();
+            renderRecordsTable();
+            renderQuickPickChips();
+        }
+
+        function renderSummaryKPIs() {
+            const totalRides = records.length;
+            const grandTotal = records.reduce((sum, r) => sum + r.total_cost, 0);
+            const avgCost = totalRides > 0 ? (grandTotal / totalRides) : 0;
+            const alertCount = records.filter(r => r.total_cost > costThreshold).length;
+
+            document.getElementById('kpiTotalRides').textContent = totalRides;
+            document.getElementById('kpiGrandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+            document.getElementById('kpiAvgCost').textContent = `$${avgCost.toFixed(2)}`;
+            document.getElementById('kpiAlerts').textContent = alertCount;
+        }
+
+        /**
+         * Interactive SVG Donut Chart & Individual Balances with Settle-Up Copy & Edit Name
+         */
+        function renderIndividualBalances() {
+            const balances = {};
+            const rideCounts = {};
+
+            records.forEach(r => {
+                Object.entries(r.shares).forEach(([person, amount]) => {
+                    balances[person] = (balances[person] || 0) + amount;
+                    rideCounts[person] = (rideCounts[person] || 0) + 1;
+                });
+            });
+
+            const sortedEntries = Object.entries(balances).sort((a, b) => b[1] - a[1]);
+            const grandTotal = sortedEntries.reduce((sum, [, val]) => sum + val, 0);
+
+            document.getElementById('passengerCountBadge').textContent = `${sortedEntries.length} Rider${sortedEntries.length === 1 ? '' : 's'}`;
+            document.getElementById('donutCenterTotal').textContent = `$${grandTotal.toFixed(0)}`;
+
+            const svgEl = document.getElementById('spendDonutSvg');
+            const legendEl = document.getElementById('donutLegend');
+            const listEl = document.getElementById('individualBalancesList');
+
+            if (sortedEntries.length === 0 || grandTotal <= 0) {
+                svgEl.innerHTML = `<circle cx="18" cy="18" r="15.915" fill="transparent" stroke="currentColor" class="text-slate-200 dark:text-white/10" stroke-width="3.8"></circle>`;
+                legendEl.innerHTML = `<p class="text-slate-400 italic text-center sm:text-left">No spend data available yet.</p>`;
+                listEl.innerHTML = `<p class="text-xs text-slate-400 italic py-4 text-center">Record a ride to view rider balances.</p>`;
+                return;
+            }
+
+            // Build SVG Donut Segments (circumference = 100 for r = 15.9155)
+            let cumulativePercent = 0;
+            const segmentsHtml = sortedEntries.map(([name, amount], idx) => {
+                const pct = (amount / grandTotal) * 100;
+                const color = RIDER_PALETTE[idx % RIDER_PALETTE.length];
+                const dashArray = `${Math.max(0, pct - 0.8)} ${100 - Math.max(0, pct - 0.8)}`;
+                const dashOffset = -cumulativePercent;
+                cumulativePercent += pct;
+
+                return `<circle cx="18" cy="18" r="15.9155" fill="transparent" stroke="${color}" stroke-width="3.8"
+                    stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" stroke-linecap="round"
+                    class="transition-all duration-500"></circle>`;
+            }).join('');
+
+            svgEl.innerHTML = segmentsHtml;
+
+            // Build Compact Legend
+            legendEl.innerHTML = sortedEntries.slice(0, 4).map(([name, amount], idx) => {
+                const pct = Math.round((amount / grandTotal) * 100);
+                const color = RIDER_PALETTE[idx % RIDER_PALETTE.length];
+                return `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 truncate">
+                            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${color}"></span>
+                            <span class="font-medium text-slate-700 dark:text-slate-200 truncate">${escapeHtml(name)}</span>
+                        </div>
+                        <span class="font-mono text-[11px] font-semibold text-slate-500 dark:text-slate-400">${pct}%</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Build Individual Rider Breakdown Cards with One-Click Settle-Up Copy & Edit Name
+            const maxVal = sortedEntries[0][1] || 1;
+            listEl.innerHTML = sortedEntries.map(([name, total], idx) => {
+                const barPct = Math.min(100, Math.round((total / maxVal) * 100));
+                const sharePct = ((total / grandTotal) * 100).toFixed(1);
+                const color = RIDER_PALETTE[idx % RIDER_PALETTE.length];
+                const trips = rideCounts[name] || 0;
+                const safeName = escapeHtml(name);
+
+                return `
+                    <div class="p-3.5 rounded-xl bg-slate-50/90 dark:bg-obsidian-900/70 border border-slate-200/70 dark:border-white/10 hover:border-brand-300 dark:hover:border-brand-500/40 transition group">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <span class="w-7 h-7 rounded-xl text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-sm" style="background-color: ${color}">
+                                    ${escapeHtml(name.charAt(0).toUpperCase())}
+                                </span>
+                                <div class="truncate">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-slate-900 dark:text-white truncate">${safeName}</span>
+                                        <button type="button" onclick="openEditRiderModal('${safeName}')"
+                                            title="Rename ${safeName}"
+                                            class="text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                                            <i class="fa-solid fa-pen text-[10px]"></i>
+                                        </button>
+                                    </div>
+                                    <div class="text-[10px] text-slate-400">${trips} trip${trips === 1 ? '' : 's'} • ${sharePct}% of total</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <span class="font-mono text-sm font-bold text-slate-900 dark:text-white">$${total.toFixed(2)}</span>
+                                <button type="button" onclick="copySettleUpSummary('${safeName}', ${total.toFixed(2)}, ${trips})"
+                                    title="Copy payment request for ${safeName}"
+                                    class="p-1.5 rounded-lg bg-white dark:bg-obsidian-850 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:border-brand-400 transition">
+                                    <i class="fa-regular fa-paper-plane text-[11px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-200/80 dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-500" style="width: ${barPct}%; background-color: ${color}"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function copySettleUpSummary(name, total, trips) {
+            const text = `SplitRide Pro Summary for ${name}: Total owed across ${trips} shared ride(s) is $${Number(total).toFixed(2)}.`;
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(`Copied payment summary for ${name} ($${Number(total).toFixed(2)})!`, "success");
+        }
+
+        /**
+         * Render Ride Ledger Table with Animated Visual Route Connector
+         */
+        function renderRecordsTable() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const tbody = document.getElementById('recordsTableBody');
+            const emptyBox = document.getElementById('emptyStateBox');
+            const countPill = document.getElementById('visibleCountPill');
+
+            const filtered = records.filter(r => {
+                if (filterAlertsOnly && r.total_cost <= costThreshold) return false;
+                if (!query) return true;
+
+                const matchId = r.ride_id.toLowerCase().includes(query);
+                const matchSrc = r.source.toLowerCase().includes(query);
+                const matchDst = r.destination.toLowerCase().includes(query);
+                const matchPassenger = Object.keys(r.shares).some(p => p.toLowerCase().includes(query));
+
+                return matchId || matchSrc || matchDst || matchPassenger;
+            });
+
+            countPill.textContent = `${filtered.length} trip${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyBox.classList.remove('hidden');
+                return;
+            }
+
+            emptyBox.classList.add('hidden');
+
+            tbody.innerHTML = filtered.map(r => {
+                const isOverThreshold = r.total_cost > costThreshold;
+                const rowHighlight = isOverThreshold
+                    ? 'bg-amber-50/50 dark:bg-amber-500/[0.06] hover:bg-amber-50 dark:hover:bg-amber-500/[0.11]'
+                    : 'hover:bg-slate-50/80 dark:hover:bg-white/[0.03]';
+
+                const badgesHtml = Object.entries(r.shares).map(([name, amt]) => `
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10 mr-1.5 mb-1">
+                        <span>${escapeHtml(name)}</span>
+                        <span class="font-mono font-bold text-slate-900 dark:text-white ml-1.5">$${amt.toFixed(2)}</span>
+                    </span>
+                `).join('');
+
+                return `
+                    <tr class="${rowHighlight} transition group">
+                        <!-- Ride ID & Timestamp -->
+                        <td class="py-4 px-4 align-top whitespace-nowrap">
+                            <span class="font-mono font-bold text-xs text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10 px-2 py-0.5 rounded-md border border-brand-200/60 dark:border-brand-500/20">
+                                ${escapeHtml(r.ride_id)}
+                            </span>
+                            <div class="font-mono text-[11px] text-slate-400 mt-1.5">${escapeHtml(r.date)}</div>
+                        </td>
+
+                        <!-- Visual Route Connector -->
+                        <td class="py-4 px-4 align-top min-w-[200px]">
+                            <div class="grid grid-cols-[16px_1fr] gap-x-2.5 items-center">
+                                <!-- Row 1: Start Point Dot & Origin Text -->
+                                <div class="flex items-center justify-center h-4">
+                                    <span class="w-2.5 h-2.5 rounded-full border-2 border-brand-500 bg-white dark:bg-obsidian-850 shrink-0"></span>
+                                </div>
+                                <div class="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate max-w-[175px]" title="${escapeHtml(r.source)}">
+                                    ${escapeHtml(r.source)}
+                                </div>
+
+                                <!-- Row 2: Non-overlapping Connector Line & Split Mode Badge -->
+                                <div class="flex items-center justify-center h-5 py-0.5">
+                                    <svg width="2" height="100%" viewBox="0 0 2 16" preserveAspectRatio="none" class="block">
+                                        <line x1="1" y1="0" x2="1" y2="16" stroke="#6366f1" stroke-width="1.5" class="route-dash" />
+                                    </svg>
+                                </div>
+                                <div class="py-0.5">
+                                    <span class="inline-block text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400">
+                                        ${r.split_mode === 'unequal' ? 'Custom Split' : 'Equal Split'}
+                                    </span>
+                                </div>
+
+                                <!-- Row 3: End Point Pin & Destination Text -->
+                                <div class="flex items-center justify-center h-4">
+                                    <i class="fa-solid fa-location-dot text-xs text-emerald-500 shrink-0"></i>
+                                </div>
+                                <div class="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate max-w-[175px]" title="${escapeHtml(r.destination)}">
+                                    ${escapeHtml(r.destination)}
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Total Fare & Threshold Badge -->
+                        <td class="py-4 px-4 align-top whitespace-nowrap">
+                            <div class="font-mono font-bold text-slate-900 dark:text-white text-sm">$${r.total_cost.toFixed(2)}</div>
+                            ${isOverThreshold ? `
+                                <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-500/30">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> &gt;$${costThreshold}
+                                </span>
+                            ` : `
+                                <span class="inline-flex items-center gap-1 mt-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                                    <i class="fa-solid fa-check-circle text-[9px]"></i> Normal
+                                </span>
+                            `}
+                        </td>
+
+                        <!-- Passenger Breakdown Pills -->
+                        <td class="py-4 px-4 align-top">
+                            <div class="flex flex-wrap max-w-xs">${badgesHtml}</div>
+                        </td>
+
+                        <!-- Delete Action -->
+                        <td class="py-4 px-4 align-top text-right whitespace-nowrap">
+                            <button onclick="deleteRecord('${r.ride_id}')"
+                                class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition"
+                                title="Delete ride record">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Bulk CSV Dataset Import with Validation & Row Error Logs
+         */
+        function handleCsvFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                document.getElementById('csvTextarea').value = evt.target.result;
+            };
+            reader.readAsText(file);
+        }
+
+        function loadSampleCsvIntoTextarea() {
+            document.getElementById('csvTextarea').value =
+`ride_id,date,source,destination,total_cost,passengers
+RIDE-105,2026-11-18 10:15,Central Station,Science Park,36.00,Alice;Bob;Charlie
+RIDE-106,2026-11-18 11:45,South Campus,International Terminal,142.00,Diana;Evan
+RIDE-BAD,2026-11-18 12:00,Invalid Row,Nowhere,-15.00,Alice`;
+        }
+
+        function processBulkCsvImport() {
+            const rawText = document.getElementById('csvTextarea').value.trim();
+            const logBox = document.getElementById('csvImportLogBox');
+            logBox.classList.remove('hidden');
+            logBox.innerHTML = '';
+
+            if (!rawText) {
+                logBox.innerHTML = `<div class="text-red-400">[Error] CSV input is empty.</div>`;
+                return;
+            }
+
+            const lines = rawText.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (lines.length < 2) {
+                logBox.innerHTML = `<div class="text-red-400">[Error] CSV must contain a header row and at least one data row.</div>`;
+                return;
+            }
+
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            const requiredCols = ['source', 'destination', 'total_cost', 'passengers'];
+            const missingCols = requiredCols.filter(col => !headers.includes(col));
+
+            if (missingCols.length > 0) {
+                logBox.innerHTML = `<div class="text-red-400">[Schema Error] Missing required columns: ${missingCols.join(', ')}</div>`;
+                return;
+            }
+
+            let importedCount = 0;
+            const logs = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(',');
+                const cleanCols = cols.map(c => c.replace(/^"|"$/g, '').trim());
+
+                const rowObj = {};
+                headers.forEach((h, idx) => {
+                    rowObj[h] = cleanCols[idx] || '';
+                });
+
+                try {
+                    const source = rowObj.source;
+                    const destination = rowObj.destination;
+                    const cost = parseFloat(rowObj.total_cost);
+                    const passengersRaw = rowObj.passengers;
+
+                    if (!source || !destination) throw new Error("Missing source or destination.");
+                    if (isNaN(cost) || cost <= 0) throw new Error(`Invalid total_cost '${rowObj.total_cost}'. Must be > 0.`);
+
+                    const delimiter = passengersRaw.includes(';') ? ';' : ',';
+                    const names = [...new Set(passengersRaw.split(delimiter).map(n => n.trim()).filter(Boolean))];
+                    if (names.length === 0) throw new Error("No valid passenger names found.");
+
+                    const share = Math.round((cost / names.length) * 100) / 100;
+                    const sharesMap = {};
+                    let running = 0;
+                    names.forEach((name, idx) => {
+                        if (idx === names.length - 1) {
+                            sharesMap[name] = Math.round((cost - running) * 100) / 100;
+                        } else {
+                            sharesMap[name] = share;
+                            running += share;
+                        }
+                    });
+
+                    const rideId = rowObj.ride_id || `RIDE-${String(records.length + importedCount + 1).padStart(3, '0')}`;
+                    const dateStr = rowObj.date || new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+                    records.unshift({
+                        ride_id: rideId,
+                        date: dateStr,
+                        source,
+                        destination,
+                        total_cost: Math.round(cost * 100) / 100,
+                        split_mode: 'equal',
+                        shares: sharesMap
+                    });
+
+                    importedCount++;
+                    logs.push(`<div class="text-emerald-400">[OK] Row ${i}: Imported ${rideId} ($${cost.toFixed(2)})</div>`);
+                } catch (err) {
+                    logs.push(`<div class="text-amber-400">[Skipped] Row ${i}: ${escapeHtml(err.message)}</div>`);
+                }
+            }
+
+            if (importedCount > 0) {
+                saveRecordsToStorage();
+                renderDashboard();
+                showToast(`Bulk Import complete: ${importedCount} ride(s) ingested.`, "success");
+            }
+
+            logBox.innerHTML = logs.join('');
+        }
+
+        /**
+         * Multi-Format Report Export (Markdown, CSV, JSON)
+         */
+        function generateMarkdownSummary() {
+            const totalRides = records.length;
+            const grandTotal = records.reduce((sum, r) => sum + r.total_cost, 0);
+            const avgCost = totalRides > 0 ? grandTotal / totalRides : 0;
+            const alerts = records.filter(r => r.total_cost > costThreshold);
+
+            const balances = {};
+            records.forEach(r => {
+                Object.entries(r.shares).forEach(([p, amt]) => {
+                    balances[p] = (balances[p] || 0) + amt;
+                });
+            });
+
+            let md = `# SplitRide Pro — Executive Mobility Report\n`;
+            md += `Generated on: ${new Date().toLocaleString()}\n\n`;
+            md += `## Key Performance Metrics\n`;
+            md += `- **Total Rides Tracked**: ${totalRides}\n`;
+            md += `- **Grand Total Spent**: $${grandTotal.toFixed(2)}\n`;
+            md += `- **Average Ride Cost**: $${avgCost.toFixed(2)}\n`;
+            md += `- **Active Threshold Alerts (> $${costThreshold.toFixed(2)})**: ${alerts.length}\n\n`;
+
+            md += `## Individual Balances Owed\n`;
+            Object.entries(balances).sort((a, b) => b[1] - a[1]).forEach(([name, total]) => {
+                md += `- **${name}**: $${total.toFixed(2)}\n`;
+            });
+
+            if (alerts.length > 0) {
+                md += `\n## Threshold Warning Flags\n`;
+                alerts.forEach(a => {
+                    md += `- ⚠️ **${a.ride_id}** (${a.source} -> ${a.destination}): **$${a.total_cost.toFixed(2)}**\n`;
+                });
+            }
+
+            return md;
+        }
+
+        function downloadReport(format) {
+            let content = '';
+            let mimeType = 'text/plain;charset=utf-8';
+            let filename = `splitride_report_${new Date().toISOString().slice(0, 10)}`;
+
+            if (format === 'markdown') {
+                content = generateMarkdownSummary();
+                mimeType = 'text/markdown;charset=utf-8';
+                filename += '.md';
+            } else if (format === 'json') {
+                content = JSON.stringify(records, null, 2);
+                mimeType = 'application/json;charset=utf-8';
+                filename += '.json';
+            } else if (format === 'csv') {
+                const rows = [['ride_id', 'date', 'source', 'destination', 'total_cost', 'split_mode', 'shares_breakdown']];
+                records.forEach(r => {
+                    const sharesStr = Object.entries(r.shares).map(([k, v]) => `${k}:$${v.toFixed(2)}`).join('; ');
+                    rows.push([
+                        `"${r.ride_id}"`,
+                        `"${r.date}"`,
+                        `"${r.source.replace(/"/g, '""')}"`,
+                        `"${r.destination.replace(/"/g, '""')}"`,
+                        r.total_cost.toFixed(2),
+                        r.split_mode,
+                        `"${sharesStr}"`
+                    ]);
+                });
+                content = rows.map(row => row.join(',')).join('\n');
+                mimeType = 'text/csv;charset=utf-8';
+                filename += '.csv';
+            }
+
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Exported ${filename} successfully!`, "success");
+        }
+
+        function copyMarkdownToClipboard() {
+            const textarea = document.getElementById('markdownPreviewArea');
+            textarea.select();
+            document.execCommand('copy');
+            showToast("Executive summary copied to clipboard!", "success");
+        }
+
+        /**
+         * Modal & Toast Notification Helpers
+         */
+        function openModal(id) {
+            if (id === 'exportModal') {
+                document.getElementById('markdownPreviewArea').value = generateMarkdownSummary();
+            }
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            const styles = {
+                success: 'bg-obsidian-900/95 text-white border-emerald-500/40',
+                warning: 'bg-obsidian-900/95 text-white border-amber-500/40',
+                error: 'bg-obsidian-900/95 text-white border-red-500/40',
+                info: 'bg-obsidian-900/95 text-white border-brand-500/40'
+            };
+
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                warning: 'fa-triangle-exclamation text-amber-400',
+                error: 'fa-circle-xmark text-red-400',
+                info: 'fa-circle-info text-brand-400'
+            };
+
+            toast.className = `animate-toast pointer-events-auto backdrop-blur-xl flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-2xl text-xs font-medium transition-opacity duration-300 ${styles[type] || styles.info}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icons[type] || icons.info} text-sm"></i>
+                <span class="flex-grow">${escapeHtml(message)}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
